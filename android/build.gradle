@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-// Bagian ini sangat penting agar Codemagic tidak bingung
+// Ini kunci agar Codemagic tidak error di baris 3
 def flutterRoot = System.getenv('FLUTTER_ROOT') ?: ""
 
 android {
@@ -23,7 +23,6 @@ android {
     }
 }
 
-// Baris ini harus ada di paling bawah
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 dependencies {

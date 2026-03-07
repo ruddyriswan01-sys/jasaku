@@ -1,30 +1,31 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-
-// Ini kunci agar Codemagic tidak error lagi
-def flutterRoot = System.getenv('FLUTTER_ROOT') ?: ""
-
-android {
-    namespace "com.roads.jasaku"
-    compileSdkVersion 33
-
-    defaultConfig {
-        applicationId "com.roads.jasaku"
-        minSdkVersion 21
-        targetSdkVersion 33
-        versionCode 1
-        versionName "1.0.0"
+buildscript {
+    ext.kotlin_version = '1.7.10'
+    repositories {
+        google()
+        mavenCentral()
     }
 
-    buildTypes {
-        release {
-            signingConfig signingConfigs.debug
-        }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
 
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.10"
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(':app')
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }

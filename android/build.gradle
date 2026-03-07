@@ -1,8 +1,19 @@
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterRoot = localProperties.getProperty('flutter.sdk')
+if (flutterRoot == null) {
+    flutterRoot = System.getenv('FLUTTER_ROOT') ?: ""
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-
-// Bagian ini adalah 'peta' otomatis agar Codemagic tidak bingung
-def flutterRoot = System.getenv('FLUTTER_ROOT') ?: ""
+apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     namespace "com.roads.jasaku"
@@ -15,16 +26,7 @@ android {
         versionCode 1
         versionName "1.0.0"
     }
-
-    buildTypes {
-        release {
-            signingConfig signingConfigs.debug
-        }
-    }
 }
-
-// Baris ini sangat penting dan harus ada di paling bawah
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.10"
